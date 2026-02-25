@@ -26,24 +26,23 @@ export const DoctorCallView = ({ appId, channel, token, uid, onReady, onLeave }:
   const [micOn, setMic] = useState(true);
   const [videoOn, setVideo] = useState(true);
 
-  // 1. Initialize tracks as true to prevent republishing race conditions
+  // Initialize tracks as true to prevent republishing race conditions
   const { localMicrophoneTrack, isLoading: micLoading } = useLocalMicrophoneTrack(true);
   const { localCameraTrack, isLoading: camLoading } = useLocalCameraTrack(true);
 
-  // 2. Properly mute/unmute tracks so the remote patient sees the changes!
   useEffect(() => {
     if (localMicrophoneTrack) {
-      localMicrophoneTrack.setEnabled(micOn);
+      localMicrophoneTrack.setMuted(!micOn);
     }
   }, [micOn, localMicrophoneTrack]);
 
   useEffect(() => {
     if (localCameraTrack) {
-      localCameraTrack.setEnabled(videoOn);
+      localCameraTrack.setMuted(!videoOn);
     }
   }, [videoOn, localCameraTrack]);
 
-  // 3. Network and connection states
+  //Network and connection states
   const connectionState = useConnectionState();
   useJoin({ appid: appId, channel: channel, token: token, uid: uid });
   
@@ -51,20 +50,9 @@ export const DoctorCallView = ({ appId, channel, token, uid, onReady, onLeave }:
   usePublish([localMicrophoneTrack, localCameraTrack].filter(Boolean) as any[]);
   const remoteUsers = useRemoteUsers();
 
-  // 4. Graceful Cleanup
-  useEffect(() => {
-    // This return function acts as React's unmount lifecycle hook.
-    // It guarantees the hardware is released when the component is destroyed.
-    return () => {
-      localCameraTrack?.stop();
-      localCameraTrack?.close();
-      localMicrophoneTrack?.stop();
-      localMicrophoneTrack?.close();
-    };
-  }, [localCameraTrack, localMicrophoneTrack]);
-
+  // Graceful Cleanup strictly on user action
   const handleLeaveCall = () => {
-    // Explicitly kill the tracks
+    // Explicitly kill the hardware tracks to turn off the camera light
     localCameraTrack?.stop();
     localCameraTrack?.close();
     localMicrophoneTrack?.stop();
@@ -74,7 +62,7 @@ export const DoctorCallView = ({ appId, channel, token, uid, onReady, onLeave }:
     onLeave();
   };
 
-  // 5. Communicate readiness back to App.tsx
+  // Communicate readiness back to App.tsx
   const isHardwareLoading = micLoading || camLoading;
   const isNetworkReady = connectionState === "CONNECTED";
 

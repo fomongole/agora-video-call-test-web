@@ -18,7 +18,7 @@ export const DoctorVideo = ({ videoTrack, videoOn }: Props) => {
         </div>
       )}
       <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm">
-        Dr. (You)
+        You
       </div>
     </div>
   );

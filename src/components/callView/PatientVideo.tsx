@@ -14,11 +14,11 @@ export const PatientVideo = ({ remoteUsers }: Props) => {
       ) : (
         <div className="flex flex-col items-center justify-center h-full text-slate-400 gap-3">
           <div className="w-10 h-10 border-4 border-slate-600 border-t-primary rounded-full animate-spin"></div>
-          <p>Waiting for patient to join...</p>
+          <p>Waiting for the other party to join...</p>
         </div>
       )}
       <div className="absolute bottom-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm">
-        Patient
+        Remote Person
       </div>
     </div>
   );

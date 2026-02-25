@@ -55,8 +55,8 @@ function App() {
             <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Video className="text-primary" size={40} />
             </div>
-            <h1 className="text-2xl font-bold mb-2">Doctor Portal</h1>
-            <p className="text-slate-500 mb-8">Click below to start the test consultation with the mobile app.</p>
+            <h1 className="text-2xl font-bold mb-2">Call Portal</h1>
+            <p className="text-slate-500 mb-8">Click below to start the video calling test with the mobile app.</p>
             <button 
               onClick={handleStartCall}
               disabled={calling}
@@ -68,7 +68,7 @@ function App() {
                   {callData ? "Connecting to Room..." : "Authenticating..."}
                 </>
               ) : (
-                "Enter Consultation Room"
+                "Enter Call Room"
               )}
             </button>
           </div>
