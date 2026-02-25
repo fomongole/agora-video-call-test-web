@@ -5,19 +5,17 @@ import { DoctorCallView } from './components/callView/DoctorCallView';
 
 function App() {
   const [calling, setCalling] = useState(false);
-  const [callReady, setCallReady] = useState(false); // Tracks when Agora is fully connected
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [callReady, setCallReady] = useState(false);
   const [callData, setCallData] = useState<any>(null);
 
   const handleStartCall = async () => {
-    setCalling(true); // Immediately show loading spinner on the button
+    setCalling(true);
     try {
-      // Use call_id 123 to match the Flutter test
+      // Using call_id 123 to match the Flutter app test
       const response = await getCallToken(123);
       if (response.success) {
         setCallData(response.data);
-        // We do NOT set calling to false here. 
-        // We stay in the loading state while Agora connects in the background.
+        // Stay in the loading state while Agora connects in the background.
       } else {
         setCalling(false);
       }
@@ -36,7 +34,7 @@ function App() {
 
   return (
     <>
-      {/* We render the CallView as soon as we have callData so it can start connecting.
+      {/* Render the CallView as soon as we have callData so it can start connecting.
         However, it will return null (invisible) until it fires onReady(). 
       */}
       {callData && (
