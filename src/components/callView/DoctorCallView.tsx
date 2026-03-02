@@ -26,7 +26,7 @@ export const DoctorCallView = ({ appId, channel, token, uid, onReady, onLeave }:
   const [micOn, setMic] = useState(true);
   const [videoOn, setVideo] = useState(true);
 
-  // Initialize tracks as true to prevent republishing race conditions
+  // Initializing tracks as true to prevent republishing race conditions
   const { localMicrophoneTrack, isLoading: micLoading } = useLocalMicrophoneTrack(true);
   const { localCameraTrack, isLoading: camLoading } = useLocalCameraTrack(true);
 
@@ -52,34 +52,28 @@ export const DoctorCallView = ({ appId, channel, token, uid, onReady, onLeave }:
 
   // Graceful Cleanup strictly on user action
   const handleLeaveCall = () => {
-    // Explicitly kill the hardware tracks to turn off the camera light
     localCameraTrack?.stop();
     localCameraTrack?.close();
     localMicrophoneTrack?.stop();
     localMicrophoneTrack?.close();
     
-    // navigate away
     onLeave();
   };
 
-  // Communicate readiness back to App.tsx
+  // Communicates readiness
   const isHardwareLoading = micLoading || camLoading;
   const isNetworkReady = connectionState === "CONNECTED";
 
   useEffect(() => {
-    // Only tells the App.tsx to flip the screen once BOTH hardware and network are fully ready
     if (!isHardwareLoading && isNetworkReady) {
       onReady();
     }
   }, [isHardwareLoading, isNetworkReady, onReady]);
 
-  // Return null (render nothing) until fully ready. 
-  // App.tsx handles the loading UI on the button.
   if (isHardwareLoading || !isNetworkReady) {
     return null;
   }
 
-  // Once ready, this renders and App.tsx hides the Home screen!
   return (
     <div className="flex flex-col h-screen bg-secondary p-4">
       <CallHeader />

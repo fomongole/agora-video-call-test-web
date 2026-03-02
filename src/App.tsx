@@ -15,7 +15,6 @@ function App() {
       const response = await getCallToken(123);
       if (response.success) {
         setCallData(response.data);
-        // Stay in the loading state while Agora connects in the background.
       } else {
         setCalling(false);
       }
@@ -34,9 +33,6 @@ function App() {
 
   return (
     <>
-      {/* Render the CallView as soon as we have callData so it can start connecting.
-        However, it will return null (invisible) until it fires onReady(). 
-      */}
       {callData && (
         <DoctorCallView 
           appId={callData.app_id}
@@ -47,8 +43,6 @@ function App() {
           onLeave={handleLeaveCall}
         />
       )}
-
-      {/* Only show the Home Screen if the call is NOT fully ready */}
       {!callReady && (
         <div className="min-h-screen flex items-center justify-center bg-slate-50">
           <div className="max-w-md w-full p-8 bg-white rounded-2xl shadow-xl text-center">
